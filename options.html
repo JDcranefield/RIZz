@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RIZz Settings</title>
+    <script src="utils.js" defer></script>
+    <script src="options.js" defer></script>
+    <link href="options.css" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="/images/duck@32.ico">
+</head>
+
+<body>
+    <div id="container">
+        <h2>Interface Options</h2>
+
+        <label>
+            <input type="checkbox" id="enableAllShortcut">
+            Enable /r/all shortcut in sidebar
+        </label>
+
+        <br><br>
+
+        <label>
+            <input type="checkbox" id="disableHovercards">
+            Disable hover cards
+        </label>
+
+        <br><br>
+
+        <label>
+            <input type="checkbox" id="enableDesktopLinks">
+            Enable desktop-style links
+        </label>
+
+        <h2>Filter Rules (Regex)</h2>
+
+        <label>
+            <input type="checkbox" id="filter_home">
+            Home
+        </label>
+
+        <br><br>
+
+        <label>
+            <input type="checkbox" id="filter_news">
+            News
+        </label>
+
+        <br><br>
+
+        <label>
+            <input type="checkbox" id="filter_popular">
+            /r/popular
+        </label>
+
+        <br><br>
+        
+        <label><input type="checkbox" id="filter_all">
+            /r/all
+        </label>
+
+        <br><br>
+
+        <label>
+            <input type="checkbox" id="filter_subreddit">
+            Subreddit pages
+        </label>
+
+        <br><br>
+
+        <button id="add">Add Rule</button>
+        <button id="undo">
+            <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M46,24A22,22,0,0,1,4.3,33.7a2,2,0,0,1,.5-2.6,2,2,0,0,1,3,.7A17.8,17.8,0,0,0,24,42,18,18,0,1,0,10.6,12h5.3A2.1,2.1,0,0,1,18,13.7,2,2,0,0,1,16,16H6a2,2,0,0,1-2-2V4.1A2.1,2.1,0,0,1,5.7,2,2,2,0,0,1,8,4V8.9A22,22,0,0,1,46,24Z" />
+            </svg>
+        </button>
+
+        <div id="rules"></div>
+
+        <h2>Import from RES (Filtereddit)</h2>
+
+        <textarea id="importBox" rows="10"></textarea>
+
+        <br><br>
+
+        <button id="import">Import Rules</button>
+        <button id="export">Export Rules</button>
+
+        <h2>Custom CSS</h2>
+
+        <textarea id="customCss" rows="10"></textarea>
+    </div>
+</body>
+
+</html>
