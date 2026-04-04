@@ -1,12 +1,9 @@
-function customCssChangedCallback(changes, area) {
-  if (area !== "local") return;
-
-  if (changes.customCss) {
-    applyCustomCSS(changes.customCss.newValue);
-  }
+function customCssChangedCallback(newValue) {
+    customCss = newValue;
+    applyCustomCSS();
 }
 
-function applyCustomCSS(css) {
+function applyCustomCSS() {
     let style = document.querySelector("#rizz-custom-css");
 
     if (!style) {
@@ -15,7 +12,7 @@ function applyCustomCSS(css) {
         document.documentElement.appendChild(style);
     }
 
-    style.textContent = css;
+    style.textContent = customCss;
 }
 
 function loadCustomCss() {
@@ -27,6 +24,6 @@ function loadCustomCss() {
 }
 
 function loadCustomCssModule() {
-    applyCustomCSS(customCss);
-    browser.storage.onChanged.addListener(customCssChangedCallback);
+    applyCustomCSS();
+    stateChanged.addListener("customCss", customCssChangedCallback);
 }
