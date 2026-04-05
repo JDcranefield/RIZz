@@ -21,6 +21,17 @@ let feedObserver = new MutationObserver((mutations) => {
     }
 });
 
+function oldFeedChecker() {
+    const postSelector = "#siteTable > div[data-fullname]";
+
+    let posts = document.documentElement.querySelectorAll(postSelector);
+    if (posts && posts.length) {
+        posts.forEach((post) => {
+            processPost(post);
+        });
+    }
+}
+
 function rulePagesChangedCallback(key, newValue) {
     filterPages[key] = newValue;
     updateRulePageCss();
@@ -148,6 +159,8 @@ function loadFilterModule() {
         childList: true,
         subtree: true
     });
+
+    oldFeedChecker();
 
     stateChanged.addListener("rules", rulesChangedCallback);
     PAGE_TYPES.forEach((key) => {
