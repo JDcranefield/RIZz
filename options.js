@@ -344,10 +344,12 @@ importBtn.addEventListener("click", () => {
     saveRules();
 });
 
-exportBtn.addEventListener("click", async () => {
-    const data = await browser.storage.local.get("rules");
-    const resFormat = exportToRES(data.rules || []);
-    importBox.value = JSON.stringify(resFormat, null, 0);
+exportBtn.addEventListener("click", () => {
+    browser.storage.local.get("rules").then((result) => {
+        const data = result;
+        const resFormat = exportToRES(data.rules || []);
+        importBox.value = JSON.stringify(resFormat, null, 0);
+    });
 });
 
 PAGE_TYPES.forEach((key) => {

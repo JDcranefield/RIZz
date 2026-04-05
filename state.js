@@ -1,9 +1,9 @@
 const reddit = {
-    root:null,
-    get isOld(){
+    root: null,
+    get isOld() {
         return this.root.matches("body:has(.content[role='main'])");
     },
-    get openInNewTab(){
+    get openInNewTab() {
         return Boolean(this.root.querySelector("shreddit-post[pdp-target='_blank']"));
     }
 };
@@ -23,11 +23,30 @@ const processedHovercards = new Set();
 const processedLinkPosts = new Set();
 const processedLinkComments = new Set();
 
-async function loadState() {
-    enableAllShortcut = await loadShortcutSettings();
-    disableHovercards = await loadTooltipsSettings();
-    enableDesktopLinks = await loadLinksSettings();
-    customCss = await loadCustomCss();
-    filterPages = await loadFilterPages();
-    filterRules = await loadFilterRules();
+function loadState() {
+    return new Promise((resolve) => {
+        Promise.all([
+            loadShortcutSettings(),
+            loadTooltipsSettings(),
+            loadLinksSettings(),
+            loadCustomCss(),
+            loadFilterPages(),
+            loadFilterRules()
+        ]).then(([
+            shortcut,
+            tooltips,
+            links,
+            css,
+            pages,
+            rules
+        ]) => {
+            enableAllShortcut = shortcut;
+            disableHovercards = tooltips;
+            enableDesktopLinks = links;
+            customCss = css;
+            filterPages = pages;
+            filterRules = rules;
+            resolve();
+        });
+    });
 }

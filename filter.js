@@ -9,11 +9,10 @@ const PAGE_DEFAULTS = {
 };
 
 let feedObserver = new MutationObserver((mutations) => {
+    const postSelector = ":is(article[data-post-id], #siteTable > div[data-fullname])";
     for (const m of mutations) {
         for (const node of m.addedNodes) {
             if (!(node instanceof HTMLElement)) continue;
-
-            const postSelector = "article[data-post-id]";
 
             if (node.matches?.(postSelector)) {
                 processPost(node);
@@ -38,15 +37,9 @@ function rulePagesChangedCallback(key, newValue) {
 function rulesChangedCallback(newValue) {
     filterRules = newValue;
 
-    if (reddit.isOld) {
-        processedByRulesPosts.forEach((post) => {
-            processPost(post, true);
-        });
-    } else {
-        processedByRulesPosts.forEach((post) => {
-            processPost(post, true);
-        });
-    }
+    processedByRulesPosts.forEach((post) => {
+        processPost(post, true);
+    });
 }
 
 function updateRulePageCss() {
@@ -76,7 +69,10 @@ function updateRulePageCss() {
                 ${filterPages["filter_popular"] ? "[href$='/r/popular'], [href$='/r/popular/']," : ""}
                 ${filterPages["filter_all"] ? "[href$='/r/all'], [href$='/r/all/']," : ""}
                 ${filterPages["filter_subreddit"] ? ":not(:is([href$='/r/all'], [href$='/r/all/'], [href$='/r/popular'], [href$='/r/popular/']))," : ""}
-                )${filterPages["filter_home"] ? "), :not(:has(#header-bottom-left > .pagename))" : ""}) {
+                )), [absenceMakesTheHeartGrowFonder],
+                ${filterPages["filter_home"] ? `:not(:has(#header-bottom-left > .pagename)):not(:has(.sr-list li.selected > a:is([href$='/r/popular'], [href$='/r/popular/']))),` : ""}
+                ${filterPages["filter_popular"] ? ":has(.sr-list li.selected > a:is([href$='/r/popular'], [href$='/r/popular/']))," : ""}
+                ) {
                 & .rizz-filtered {
                     & + div.clearleft {
                         display: none !important;
@@ -87,24 +83,21 @@ function updateRulePageCss() {
             }
         `;
 
-    reddit.root.appendChild(style);
-}
-
-function oldFeedChecker() {
-    const postSelector = "#siteTable > div[data-fullname]";
-
-    let posts = reddit.root.querySelectorAll(postSelector);
-    if (posts && posts.length) {
-        posts.forEach((post) => {
-            processPost(post);
-        });
-    }
+    document.documentElement.appendChild(style);
 }
 
 function shouldFilter(postOuter) {
     let post = {};
 
-    if (reddit.isOld) {
+    if (postOuter.matches("article")) {
+        post.element = postOuter.querySelector("shreddit-post");
+        post.title = post.element.getAttribute("post-title");
+        post.subreddit = post.element.getAttribute("subreddit-name");
+        post.linkflair = post.element.querySelector("shreddit-post-flair div.flair-content")?.innerText;
+        post.userflair = post.element.querySelector("author-flair-event-handler > span")?.innerText;
+        post.domain = post.element.getAttribute("domain");
+        post.username = post.element.getAttribute("author");
+    } else {
         post.element = postOuter;
         post.title = post.element.querySelector("[data-event-action='title']")?.innerText;
         post.subreddit = post.element.getAttribute("data-subreddit");
@@ -114,14 +107,6 @@ function shouldFilter(postOuter) {
         post.username = post.element.getAttribute("data-author");
 
 
-    } else {
-        post.element = postOuter.querySelector("shreddit-post");
-        post.title = post.element.getAttribute("post-title");
-        post.subreddit = post.element.getAttribute("subreddit-name");
-        post.linkflair = post.element.querySelector("shreddit-post-flair div.flair-content")?.innerText;
-        post.userflair = post.element.querySelector("author-flair-event-handler > span")?.innerText;
-        post.domain = post.element.getAttribute("domain");
-        post.username = post.element.getAttribute("author");
     }
 
     return filterRules.some(rule => {
@@ -201,14 +186,10 @@ function loadFilterRules() {
 }
 
 function loadFilterModule() {
-    if (reddit.isOld) {
-        oldFeedChecker();
-    } else {
-        feedObserver.observe(reddit.root, {
-            childList: true,
-            subtree: true
-        });
-    }
+    feedObserver.observe(document.documentElement, {
+        childList: true,
+        subtree: true
+    });
 
     stateChanged.addListener("rules", rulesChangedCallback);
     PAGE_TYPES.forEach((key) => {

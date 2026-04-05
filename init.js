@@ -1,22 +1,15 @@
-function preloadCss() {
-    applyCustomCSS();
-    updateRulePageCss();
-    applyLinksStyle();
-}
+function init() {
+    loadState().then(() => {
+        loadCustomCssModule();
+        loadFilterModule();
+        loadTooltipsModule();
+        loadShortcutModule();
+        loadLinksModule();
 
-async function init() {
-    await loadState();
-    preloadCss();
-
-    reddit.root = await waitFor(":is(shreddit-app, body:has(.content[role='main']))");
-
-    if (!reddit.root) return;
-
-    loadShortcutModule();
-    loadTooltipsModule();
-    loadLinksModule();
-    loadFilterModule();
-    loadCustomCssModule();
+        waitFor(":is(shreddit-app, body:has(.content[role='main']))").then((root) => {
+            reddit.root = root;
+        });
+    });
 }
 
 init();

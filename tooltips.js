@@ -1,4 +1,9 @@
 let tooltipsObserver = new MutationObserver((mutations) => {
+    if (reddit.root && reddit.isOld) {
+        tooltipsObserver.disconnect();
+        return;
+    }
+
     for (const m of mutations) {
         for (const node of m.addedNodes) {
             if (node.nodeType !== 1) continue;
@@ -48,9 +53,9 @@ function oldTooltipsChecker() {
             style = document.createElement("style");
             style.id = "rizz-disable-hovercard";
             style.textContent = "div.author-tooltip {display:none !important;}";
-            reddit.root.appendChild(style);
+            document.documentElement.appendChild(style);
         }
-    } else if((style)) style.remove();
+    } else if ((style)) style.remove();
 }
 
 function loadTooltipsSettings() {
@@ -62,14 +67,11 @@ function loadTooltipsSettings() {
 }
 
 function loadTooltipsModule() {
-    if (reddit.isOld) {
-        oldTooltipsChecker();
-    } else {
-        tooltipsObserver.observe(reddit.root, {
-            childList: true,
-            subtree: true
-        });
-    }
+    oldTooltipsChecker();
+    tooltipsObserver.observe(document.documentElement, {
+        childList: true,
+        subtree: true
+    });
 
     stateChanged.addListener("disableHovercards", disableHovercardsChangedCallback);
 }

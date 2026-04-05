@@ -1,4 +1,9 @@
 let sidebarObserver = new MutationObserver(() => {
+    if (reddit.root && reddit.isOld) {
+        sidebarObserver.disconnect();
+        return;
+    }
+
     updateEnableAllShortcut();
 });
 
@@ -9,15 +14,15 @@ function enableAllShortcutChangedCallback(newValue) {
 }
 
 function updateEnableAllShortcut() {
-    let leftTopNavSection = reddit.root.querySelector("left-nav-top-section");
+    let leftTopNavSection = document.documentElement.querySelector("left-nav-top-section");
     if (!leftTopNavSection) return;
 
-    if(enableAllShortcut) {
+    if (enableAllShortcut) {
         leftTopNavSection.setAttribute("all", "");
     } else {
         leftTopNavSection.removeAttribute("all");
     }
-    
+
 }
 
 function loadShortcutSettings() {
@@ -29,8 +34,7 @@ function loadShortcutSettings() {
 }
 
 function loadShortcutModule() {
-    if(reddit.isOld) return;
-    sidebarObserver.observe(reddit.root, {
+    sidebarObserver.observe(document.documentElement, {
         childList: true,
         subtree: true
     });

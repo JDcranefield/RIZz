@@ -1,85 +1,86 @@
+
+let linkCommentsObserver = new MutationObserver((mutations) => {
+    if (reddit.root && reddit.isOld) {
+        sidebarObserver.disconnect();
+        return;
+    }
+
+    for (const m of mutations) {
+        for (const node of m.addedNodes) {
+            if (!(node instanceof HTMLElement)) continue;
+
+            if (node.matches?.("shreddit-profile-comment")) {
+                processLinkComment(node);
+                continue;
+            }
+
+            const comments = node.querySelectorAll?.("shreddit-profile-comment");
+            if (comments && comments.length) {
+                comments.forEach(processLinkComment);
+            }
+        }
+    }
+});
+
+let linkPostsObserver = new MutationObserver((mutations) => {
+    if (reddit.root && reddit.isOld) {
+        sidebarObserver.disconnect();
+        return;
+    }
+
+    for (const m of mutations) {
+        for (const node of m.addedNodes) {
+            if (!(node instanceof HTMLElement)) continue;
+
+            if (node.matches?.("shreddit-post")) {
+                processLinkPost(node);
+                continue;
+            }
+
+            const comments = node.querySelectorAll?.("shreddit-post");
+            if (comments && comments.length) {
+                comments.forEach(processLinkPost);
+            }
+        }
+    }
+});
+
 function enableDesktopLinksChangedCallback(newValue) {
     enableDesktopLinks = newValue;
 
-    applyLinksStyle();
+    updateLinksStyle();
 }
 
-function modifyLinks() {
-    let linkCommentsObserver = new MutationObserver((mutations) => {
-        for (const m of mutations) {
-            for (const node of m.addedNodes) {
-                if (!(node instanceof HTMLElement)) continue;
+function processLinkComment(comment) {
+    if (processedLinkComments.has(comment)) return;
+    processedLinkComments.add(comment);
 
-                if (node.matches?.("shreddit-profile-comment")) {
-                    processLinkComment(node);
-                    continue;
-                }
+    comment.addEventListener("click", (e) => {
+        if (enableDesktopLinks
+            && !e.detail.isFake
+            && e.target.tagName.toLowerCase() != "shreddit-comment-share-button"
+            && e.target.tagName.toLowerCase() != "shreddit-overflow-menu") {
+            e.stopPropagation();
 
-                const comments = node.querySelectorAll?.("shreddit-profile-comment");
-                if (comments && comments.length) {
-                    comments.forEach(processLinkComment);
-                }
-            }
+            const fakeClick = new CustomEvent("click", {
+                bubbles: true,
+                detail: { isFake: true }
+            });
+            reddit.root.dispatchEvent(fakeClick);
         }
-    });
+    }, true);
+}
 
-    let linkPostsObserver = new MutationObserver((mutations) => {
-        for (const m of mutations) {
-            for (const node of m.addedNodes) {
-                if (!(node instanceof HTMLElement)) continue;
+function processLinkPost(post) {
+    if (processedLinkPosts.has(post)) return;
+    processedLinkPosts.add(post);
 
-                if (node.matches?.("shreddit-post")) {
-                    processLinkPost(node);
-                    continue;
-                }
-
-                const comments = node.querySelectorAll?.("shreddit-post");
-                if (comments && comments.length) {
-                    comments.forEach(processLinkPost);
-                }
-            }
-        }
-    });
-
-    function processLinkComment(comment) {
-        if (processedLinkComments.has(comment)) return;
-        processedLinkComments.add(comment);
-
-        comment.addEventListener("click", (e) => {
-            if (enableDesktopLinks 
-                && !e.detail.isFake
-                && e.target.tagName.toLowerCase() != "shreddit-comment-share-button"
-                && e.target.tagName.toLowerCase() != "shreddit-overflow-menu") {
-                e.stopPropagation();
-
-                const fakeClick = new CustomEvent("click", {
-                    bubbles: true,
-                    detail: { isFake: true }
-                });
-                reddit.root.dispatchEvent(fakeClick);
-            }
-        }, true);
-    }
-
-    function processLinkPost(post) {
-        if (processedLinkPosts.has(post)) return;
-        processedLinkPosts.add(post);
-
+    if (post.querySelector("div > a[slot='title']")) {
         post.querySelector("div > a[slot='title']").target = "_blank";
     }
-
-    linkPostsObserver.observe(reddit.root, {
-        childList: true,
-        subtree: true
-    });
-
-    linkCommentsObserver.observe(reddit.root, {
-        childList: true,
-        subtree: true
-    });
 }
 
-function applyLinksStyle() {
+function updateLinksStyle() {
     let style = document.querySelector("#rizz-links");
 
     if (!enableDesktopLinks) {
@@ -140,7 +141,7 @@ function applyLinksStyle() {
             }
         `;
 
-    reddit.root.appendChild(style);
+    document.documentElement.appendChild(style);
 }
 
 function loadLinksSettings() {
@@ -152,7 +153,15 @@ function loadLinksSettings() {
 }
 
 function loadLinksModule() {
-    modifyLinks();
-    applyLinksStyle();
+    linkPostsObserver.observe(document.documentElement, {
+        childList: true,
+        subtree: true
+    });
+
+    linkCommentsObserver.observe(document.documentElement, {
+        childList: true,
+        subtree: true
+    });
+    updateLinksStyle();
     stateChanged.addListener("enableDesktopLinks", enableDesktopLinksChangedCallback);
 }

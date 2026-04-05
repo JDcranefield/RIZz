@@ -1,9 +1,9 @@
 function customCssChangedCallback(newValue) {
     customCss = newValue;
-    applyCustomCSS();
+    updateCustomCSS();
 }
 
-function applyCustomCSS() {
+function updateCustomCSS() {
     let style = document.querySelector("#rizz-custom-css");
 
     if (!style) {
@@ -24,6 +24,6 @@ function loadCustomCss() {
 }
 
 function loadCustomCssModule() {
-    applyCustomCSS();
+    updateCustomCSS();
     stateChanged.addListener("customCss", customCssChangedCallback);
 }
