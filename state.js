@@ -8,14 +8,11 @@ const reddit = {
     }
 };
 
-let enableAllShortcut;
-let disableHovercards;
-let enableDesktopLinks;
-
+let enableAllShortcut = false;
+let disableHovercards = false;
+let enableDesktopLinks = false;
 let customCss = "";
-
 let filterPages = {};
-
 let filterRules = [];
 
 const processedByRulesPosts = new Set();

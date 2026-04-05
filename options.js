@@ -126,7 +126,7 @@ function createRuleRow(rule = {}) {
 
     const pattern = document.createElement("input");
     pattern.placeholder = "/example/i";
-    pattern.value = rule.pattern || "";
+    pattern.value = rule.pattern ?? "";
     pattern.addEventListener("input", () => {
         saveRules();
     });
@@ -183,7 +183,7 @@ function saveOptions() {
 
 function loadCustomCss() {
     browser.storage.local.get("customCss").then((data) => {
-        customCssBox.value = data.customCss || "";
+        customCssBox.value = data.customCss ?? "";
     });
 }
 
@@ -219,7 +219,7 @@ function saveRulePages() {
 function loadRules() {
     browser.storage.local.get("rules").then((data) => {
         rulesContainer.innerHTML = "";
-        const rules = data.rules || [];
+        const rules = data.rules ?? [];
 
         rules.forEach(rule => {
             rulesContainer.appendChild(createRuleRow(rule));
@@ -345,9 +345,8 @@ importBtn.addEventListener("click", () => {
 });
 
 exportBtn.addEventListener("click", () => {
-    browser.storage.local.get("rules").then((result) => {
-        const data = result;
-        const resFormat = exportToRES(data.rules || []);
+    browser.storage.local.get("rules").then((data) => {
+        const resFormat = exportToRES(data.rules ?? []);
         importBox.value = JSON.stringify(resFormat, null, 0);
     });
 });
