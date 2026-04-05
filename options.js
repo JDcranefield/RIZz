@@ -1,28 +1,3 @@
-const PAGE_TYPES = ["home", "news", "popular", "all", "subreddit"];
-
-const PAGE_DEFAULTS = {
-    home: true,
-    news: true,
-    popular: true,
-    all: true,
-    subreddit: false
-};
-
-const RULE_TYPES = ["title", "subreddit", "linkflair", "userflair", "domain", "username"];
-
-const TYPE_MAP = {
-    postTitle: "title",
-    subreddit: "subreddit",
-    linkFlair: "linkflair",
-    userFlair: "userflair",
-    domain: "domain",
-    username: "username"
-};
-
-const REVERSE_TYPE_MAP = Object.fromEntries(
-    Object.entries(TYPE_MAP).map(([k, v]) => [v, k])
-);
-
 const deletedRules = [];
 
 const enableAllShortcutCheck = document.querySelector("#enableAllShortcut");
@@ -44,16 +19,13 @@ function extractFromRES(data) {
 
     if (!data?.body?.of) return rules;
 
-    for (const item of data.body.of) {
-        const mappedType = TYPE_MAP[item.type];
-        if (!mappedType) continue;
-
-        const parsed = item.patt;
-        if (!parsed) continue;
+    for (const resRule of data.body.of) {
+        const type = RES_TYPE_MAP[resRule.type];
+        if (!type || !resRule.patt) continue;
 
         rules.push({
-            type: mappedType,
-            pattern: parsed
+            type: type,
+            pattern: resRule.patt
         });
     }
 
@@ -69,7 +41,7 @@ function exportToRES(rules) {
             type: "group",
             op: "any",
             of: rules.map(f => ({
-                type: REVERSE_TYPE_MAP[f.type],
+                type: REVERSE_RES_TYPE_MAP[f.type],
                 patt: `${f.pattern}`
             }))
         },

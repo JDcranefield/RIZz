@@ -1,13 +1,3 @@
-const PAGE_TYPES = ["home", "news", "popular", "all", "subreddit"];
-
-const PAGE_DEFAULTS = {
-    home: true,
-    news: true,
-    popular: true,
-    all: true,
-    subreddit: false
-};
-
 let feedObserver = new MutationObserver((mutations) => {
     const postSelector = ":is(article[data-post-id], #siteTable > div[data-fullname])";
     for (const m of mutations) {
