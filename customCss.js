@@ -15,14 +15,6 @@ function updateCustomCSS() {
     style.textContent = customCss;
 }
 
-function loadCustomCss() {
-    return new Promise(resolve => {
-        browser.storage.local.get("customCss", (data) => {
-            resolve(data.customCss || "");
-        });
-    });
-}
-
 function loadCustomCssModule() {
     updateCustomCSS();
     stateChanged.addListener("customCss", customCssChangedCallback);

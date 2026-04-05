@@ -151,40 +151,6 @@ function processPost(post, reprocess = false) {
     }
 }
 
-function loadFilterPages() {
-    return new Promise(resolve => {
-        browser.storage.local.get(
-            PAGE_TYPES.map(k => `filter_${k}`)
-        ).then((result) => {
-            let compiled = {};
-            PAGE_TYPES.forEach(key => {
-                compiled[`filter_${key}`] = result[`filter_${key}`] ?? PAGE_DEFAULTS[key];
-            });
-
-            resolve(compiled);
-        });
-    });
-}
-
-function loadFilterRules() {
-    return new Promise(resolve => {
-        browser.storage.local.get("rules", (data) => {
-            const compiled = (data.rules || []).map(rule => {
-                try {
-                    return {
-                        type: rule.type,
-                        pattern: rule.pattern
-                    };
-                } catch {
-                    return null;
-                }
-            }).filter(Boolean);
-
-            resolve(compiled);
-        });
-    });
-}
-
 function loadFilterModule() {
     feedObserver.observe(document.documentElement, {
         childList: true,

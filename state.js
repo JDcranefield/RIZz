@@ -8,9 +8,9 @@ const reddit = {
     }
 };
 
-let enableAllShortcut = false;
-let disableHovercards = false;
-let enableDesktopLinks = false;
+let enableAllShortcut;
+let disableHovercards;
+let enableDesktopLinks;
 
 let customCss = "";
 
@@ -25,27 +25,22 @@ const processedLinkComments = new Set();
 
 function loadState() {
     return new Promise((resolve) => {
-        Promise.all([
-            loadShortcutSettings(),
-            loadTooltipsSettings(),
-            loadLinksSettings(),
-            loadCustomCss(),
-            loadFilterPages(),
-            loadFilterRules()
-        ]).then(([
-            shortcut,
-            tooltips,
-            links,
-            css,
-            pages,
-            rules
-        ]) => {
-            enableAllShortcut = shortcut;
-            disableHovercards = tooltips;
-            enableDesktopLinks = links;
-            customCss = css;
-            filterPages = pages;
-            filterRules = rules;
+        browser.storage.local.get([
+            "enableAllShortcut",
+            "disableHovercards",
+            "enableDesktopLinks",
+            "customCss",
+            ...(PAGE_TYPES.map(key => `filter_${key}`)),
+            "rules"
+        ]).then((data) => {
+            enableAllShortcut = data.enableAllShortcut ?? enableAllShortcut;
+            disableHovercards = data.disableHovercards ?? disableHovercards;
+            enableDesktopLinks = data.enableDesktopLinks ?? enableDesktopLinks;
+            customCss = data.customCss ?? customCss;
+            PAGE_TYPES.forEach(key => {
+                filterPages[`filter_${key}`] = data[`filter_${key}`] ?? PAGE_DEFAULTS[key];
+            });
+            filterRules = data.rules ?? filterRules;
             resolve();
         });
     });

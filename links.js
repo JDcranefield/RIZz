@@ -144,14 +144,6 @@ function updateLinksStyle() {
     document.documentElement.appendChild(style);
 }
 
-function loadLinksSettings() {
-    return new Promise(resolve => {
-        browser.storage.local.get("enableDesktopLinks", (data) => {
-            resolve(data.enableDesktopLinks);
-        });
-    });
-}
-
 function loadLinksModule() {
     linkPostsObserver.observe(document.documentElement, {
         childList: true,

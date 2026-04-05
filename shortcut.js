@@ -25,14 +25,6 @@ function updateEnableAllShortcut() {
 
 }
 
-function loadShortcutSettings() {
-    return new Promise(resolve => {
-        browser.storage.local.get("enableAllShortcut", (data) => {
-            resolve(data.enableAllShortcut);
-        });
-    });
-}
-
 function loadShortcutModule() {
     sidebarObserver.observe(document.documentElement, {
         childList: true,

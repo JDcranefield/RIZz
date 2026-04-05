@@ -58,14 +58,6 @@ function oldTooltipsChecker() {
     } else if ((style)) style.remove();
 }
 
-function loadTooltipsSettings() {
-    return new Promise(resolve => {
-        browser.storage.local.get("disableHovercards", (data) => {
-            resolve(data.disableHovercards);
-        });
-    });
-}
-
 function loadTooltipsModule() {
     oldTooltipsChecker();
     tooltipsObserver.observe(document.documentElement, {
