@@ -15,11 +15,6 @@ let customCss = "";
 let filterPages = {};
 let filterRules = [];
 
-const processedByRulesPosts = new Set();
-const processedHovercards = new Set();
-const processedLinkPosts = new Set();
-const processedLinkComments = new Set();
-
 function loadState() {
     return new Promise((resolve) => {
         browser.storage.local.get([

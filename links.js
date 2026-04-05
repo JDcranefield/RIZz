@@ -1,3 +1,5 @@
+const processedLinkPosts = new Set();
+const processedLinkComments = new Set();
 
 let linkCommentsObserver = new MutationObserver((mutations) => {
     if (reddit.root && reddit.isOld) {

@@ -1,3 +1,5 @@
+const processedHovercards = new Set();
+
 let tooltipsObserver = new MutationObserver((mutations) => {
     if (reddit.root && reddit.isOld) {
         tooltipsObserver.disconnect();

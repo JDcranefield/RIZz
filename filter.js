@@ -1,3 +1,5 @@
+const processedByRulesPosts = new Set();
+
 let feedObserver = new MutationObserver((mutations) => {
     const postSelector = ":is(article[data-post-id], #siteTable > div[data-fullname])";
     for (const m of mutations) {
