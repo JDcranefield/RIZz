@@ -18,6 +18,10 @@ function updateEnableAllShortcut() {
     if (!leftTopNavSection) return;
 
     if (enableAllShortcut) {
+        if(!leftTopNavSection.shadowRoot) return;
+        waitFor("a[href='/r/all/']" , leftTopNavSection.shadowRoot).then((shortcut) => {
+            shortcut.setAttribute("href", "/r/All/");
+        });
         leftTopNavSection.setAttribute("all", "");
     } else {
         leftTopNavSection.removeAttribute("all");
