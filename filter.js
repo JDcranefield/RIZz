@@ -21,8 +21,8 @@ let feedObserver = new MutationObserver((mutations) => {
     }
 });
 
-function oldFeedChecker() {
-    const postSelector = "#siteTable > div[data-fullname]";
+function fallbackFeedChecker() {
+    const postSelector = ":is(article[data-post-id], #siteTable > div[data-fullname])";
 
     let posts = document.documentElement.querySelectorAll(postSelector);
     if (posts && posts.length) {
@@ -160,7 +160,7 @@ function loadFilterModule() {
         subtree: true
     });
 
-    oldFeedChecker();
+    fallbackFeedChecker();
 
     stateChanged.addListener("rules", rulesChangedCallback);
     PAGE_TYPES.forEach((key) => {

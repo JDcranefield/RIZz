@@ -1,0 +1,3 @@
+.rizz-loading :is(#siteTable > div[data-fullname]) a {
+    display: none;
+}
