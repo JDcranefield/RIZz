@@ -3,7 +3,7 @@ const processedLinkComments = new Set();
 
 let linkCommentsObserver = new MutationObserver((mutations) => {
     if (reddit.root && reddit.isOld) {
-        sidebarObserver.disconnect();
+        linkCommentsObserver.disconnect();
         return;
     }
 
@@ -26,7 +26,7 @@ let linkCommentsObserver = new MutationObserver((mutations) => {
 
 let linkPostsObserver = new MutationObserver((mutations) => {
     if (reddit.root && reddit.isOld) {
-        sidebarObserver.disconnect();
+        linkPostsObserver.disconnect();
         return;
     }
 

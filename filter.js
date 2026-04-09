@@ -162,6 +162,8 @@ function loadFilterModule() {
 
     fallbackFeedChecker();
 
+    document.documentElement.classList.remove("rizz-filter-loading");
+
     stateChanged.addListener("rules", rulesChangedCallback);
     PAGE_TYPES.forEach((key) => {
         stateChanged.addListener(`filter_${key}`, (newValue) => {

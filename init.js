@@ -1,5 +1,9 @@
 function init() {
-    document.documentElement.classList.add("rizz-loading",);
+    document.documentElement.classList.add("rizz-filter-loading",);
+    
+    waitFor(":is(shreddit-app, body:has(.content[role='main']))").then((root) => {
+        reddit.root = root;
+    });
 
     loadState().then(() => {
         loadCustomCssModule();
@@ -7,11 +11,6 @@ function init() {
         loadTooltipsModule();
         loadShortcutModule();
         loadLinksModule();
-
-        waitFor(":is(shreddit-app, body:has(.content[role='main']))").then((root) => {
-            reddit.root = root;
-            document.documentElement.classList.remove("rizz-loading");
-        });
     });
 }
 
