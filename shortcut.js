@@ -26,6 +26,7 @@ function buildRizzedFeed() {
     let sort = params.get("sort")?.toUpperCase() ?? "HOT";
     let feed = document.querySelector("shreddit-feed");
     let sortEl = document.querySelector("shreddit-async-loader[bundlename='shreddit_sort_dropdown'] > div");
+    let sortElChild = sortEl.querySelector("div:has(> shreddit-sort-dropdown)");
 
     let wrapper = document.createElement("div");
     wrapper.className = "flex items-center";
@@ -58,6 +59,7 @@ function buildRizzedFeed() {
     dropdown.append(selected, tooltip, items);
     wrapper.appendChild(dropdown);
 
+    if(sortElChild) sortElChild.remove();
     sortEl.prepend(wrapper);
 
     document.documentElement.querySelectorAll('a[href*="feedViewType"]').forEach((link) => {
