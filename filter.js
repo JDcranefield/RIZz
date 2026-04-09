@@ -53,10 +53,10 @@ function updateRulePageCss() {
     style.textContent =
         `
             shreddit-feed:is([absenceMakesTheHeartGrowFonder],
-                ${filterPages["filter_home"] ? "[reload-url^='/svc/shreddit/feeds/home-feed']," : ""}
+                ${filterPages["filter_home"] ? "[reload-url^='/svc/shreddit/feeds/home-feed']:not([is-rizzed])," : ""}
                 ${filterPages["filter_news"] ? "[reload-url^='/svc/shreddit/feeds/news-feed']," : ""}
                 ${filterPages["filter_popular"] ? "[reload-url^='/svc/shreddit/feeds/popular-feed']," : ""}
-                ${filterPages["filter_all"] ? "[reload-url^='/svc/shreddit/feeds/all-feed']," : ""}
+                ${filterPages["filter_all"] ? "[reload-url^='/svc/shreddit/feeds/all-feed'], [is-rizzed]," : ""}
                 ${filterPages["filter_subreddit"] ? "[reload-url^='/svc/shreddit/community-more-posts']," : ""}
             ) {
                 & .rizz-filtered {

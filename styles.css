@@ -1,3 +1,7 @@
 .rizz-filter-loading #siteTable > div[data-fullname] {
     opacity: 0 !important;
 }
+
+.rizz-hide {
+    display: none !important;
+}

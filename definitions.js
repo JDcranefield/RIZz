@@ -22,3 +22,5 @@ const RES_TYPE_MAP = {
 const REVERSE_RES_TYPE_MAP = Object.fromEntries(
     Object.entries(RES_TYPE_MAP).map(([k, v]) => [v, k])
 );
+
+const FEED_SORT_TYPES = ["HOT", "NEW", "TOP", "RISING"];

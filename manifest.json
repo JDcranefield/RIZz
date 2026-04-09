@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "Reddit Improvement Zzuite (RIZz)",
-    "version": "0.3.10",
+    "version": "0.4.1",
     "description": "Enhances/improves Reddit by giving users tools to curate their own experience on the site.",
     "icons": {
         "32": "/images/duck@32.png",
