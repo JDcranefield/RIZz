@@ -51,15 +51,15 @@ function buildRizzedFeed() {
     items.slot = "dropdown-items";
 
     items.append(
-    ...FEED_SORT_TYPES.map(s =>
-        createSortOption(s, s[0].toUpperCase() + s.slice(1).toLowerCase(), sort)
-    )
-);
+        ...FEED_SORT_TYPES.map(s =>
+            createSortOption(s, s[0].toUpperCase() + s.slice(1).toLowerCase(), sort)
+        )
+    );
 
     dropdown.append(selected, tooltip, items);
     wrapper.appendChild(dropdown);
 
-    if(sortElChild) sortElChild.remove();
+    if (sortElChild) sortElChild.remove();
     sortEl.prepend(wrapper);
 
     document.documentElement.querySelectorAll('a[href*="feedViewType"]').forEach((link) => {
@@ -174,7 +174,6 @@ function updateEnableAllShortcut() {
     } else {
         leftTopNavSection.removeAttribute("all");
     }
-
 }
 
 function loadShortcutModule() {

@@ -1,6 +1,6 @@
 function init() {
-    document.documentElement.classList.add("rizz-filter-loading",);
-    
+    document.documentElement.classList.add("rizz-filter-loading");
+
     waitFor(":is(shreddit-app, body:has(.content[role='main']))").then((root) => {
         reddit.root = root;
     });
