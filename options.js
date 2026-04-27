@@ -7,6 +7,7 @@ const enableDesktopLinksCheck = document.querySelector("#enableDesktopLinks");
 const customCssBox = document.querySelector("#customCss");
 
 const undoBtn = document.querySelector("#undo");
+const searchTxt = document.querySelector("#search");
 const addBtn = document.querySelector("#add");
 const rulesContainer = document.querySelector("#rules");
 
@@ -129,6 +130,24 @@ function undoDelete() {
 
     updateUndoButton();
     saveRules();
+}
+
+function searchFilters() {
+    const query = searchTxt.value?.trim().toLowerCase() ?? "";
+    const rules = document.querySelectorAll("#rules > .rule");
+
+    rules.forEach((rule) => {
+        const select = rule.querySelector("select");
+        const input = rule.querySelector("input");
+        const type = select.value?.toLowerCase() ?? "";
+        const pattern = input.value?.toLowerCase() ?? "";
+
+        if(type.includes(query) || pattern.includes(query)) {
+            rule.style.display = "";
+        } else {
+            rule.style.display = "none";
+        }
+    });
 }
 
 function loadOptions() {
@@ -261,12 +280,23 @@ customCssBox.addEventListener("input", () => {
 });
 
 addBtn.addEventListener("click", () => {
-    rulesContainer.prepend(createRuleRow());
+    let rule = {};
+    RULE_TYPES.forEach(t => {
+        if (searchTxt.value?.trim().toLowerCase() === t.toLowerCase()) rule.type = t;
+    });
+    if(!rule.type) rule.pattern = searchTxt.value?.trim() ?? "";
+    rulesContainer.prepend(createRuleRow(rule));
+    searchTxt.value = "";
     saveRules();
+    searchFilters();
 });
 
 undoBtn.addEventListener("click", () => {
     undoDelete();
+});
+
+searchTxt.addEventListener("input", () => {
+    searchFilters();
 });
 
 importBtn.addEventListener("click", () => {

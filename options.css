@@ -52,7 +52,15 @@ button {
     display: block;
 }
 
-#add,
+#rulesTopSection {
+    display: flex;
+    gap: 10px;
+}
+
+#search {
+    flex: 1;
+}
+
 #import {
     margin-right: 5px;
 }
