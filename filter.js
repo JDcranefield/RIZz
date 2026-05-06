@@ -104,7 +104,7 @@ function shouldFilter(postOuter) {
         post.element = postOuter;
         post.title = post.element.querySelector("[data-event-action='title']")?.innerText;
         post.subreddit = post.element.getAttribute("data-subreddit");
-        post.linkflair = post.element.querySelector(".linkflairlabel > span")?.innerText;
+        post.linkflair = post.element.querySelector(".linkflairlabel")?.getAttribute("title");
         post.userflair = post.element.querySelector(".flair")?.getAttribute("title");
         post.domain = post.element.getAttribute("data-domain");
         post.username = post.element.getAttribute("data-author");
